@@ -14,9 +14,10 @@ app.use(express.static('public'));
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
 );
-
+// joining to the note html
 app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
+  res.sendFile(path.join(__dirname, '/public/notes.html')
+  )
 );
 //get for all notes
 app.get('/api/notes', (req, res) => {
@@ -24,30 +25,30 @@ res.json(`${req.method} request received for notes `);
 console.info(`${req.method} request received for notes`);
 });
 //get for idividual notes
-app.get('/api/notes/:note_id', (req, res) => {
-    if (req.body && req.params.note_id) {
+app.get('/api/notes/:id', (req, res) => {
+    if (req.body && req.params.id) {
       console.info(`${req.method} request received for a note`);
-      const reviewId = req.params.review_id;
-      for (let i = 0; i < reviews.length; i++) {
+      const id = req.params.id;
+      for (let i = 0; i < notes.length; i++) {
         const currentNote = notes[i];
-        if (currentNote.note_id === noteId) {
+        if (currentNote.id === noteId) {
           res.json(currentNote);
           return;
         }
       }
       res.json('Note ID not found');
     }
-  });
+});
 //too add a new note
   app.post('/api/notes', (req, res) => {
-    console.info(`${req.method} request received to add a review`);
+    console.info(`${req.method} request received to add a note`);
     //making sure new note has required fields
     const { title, text } = req.body;
     if (title && text) {
         const newNote = {
             title,
             text,
-            note_id: uuid(),
+            id: uuid(),
         };
 
         fs.readFile('./db/db.json', 'utf-8', (err,data) => {
@@ -70,9 +71,9 @@ app.get('/api/notes/:note_id', (req, res) => {
         console.log(response);
         res.json(response);
     }else {
-        res.json('new note error');
-    }
-  });
+        // res.json('new note error');
+    }res.json(notes);
+});
 
   app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
