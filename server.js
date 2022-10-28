@@ -45,9 +45,31 @@ app.get('/api/notes/:note_id', (req, res) => {
             text,
             note_id: uuid(),
         };
+
+        fs.readFile('./db/db.json', 'utf-8', (err,data) => {
+            if(err) {
+                console.error(err);
+            } else {
+                const parsedNotes = JSON.parse(data);
+                //pushing the new note
+                parsedNotes.push(newNote);
+                notes = parsedNotes;
+
+                fs.writeFile('./db/db.json',
+                JsON.stringify(parsedNotes),
+                (writeErr)=> writeErr ? console.err(writeErr)
+                :console.info('Updated Notes')
+                );
+            }
+        });
+        const response = {status: 'success', body: newNote,};
+        console.log(response);
+        res.json(response);
+    }else {
+        res.json('new note error');
     }
   });
-  
+
   app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
