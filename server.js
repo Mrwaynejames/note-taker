@@ -14,6 +14,10 @@ app.use(express.static('public'));
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
 );
+
+app.get('/notes', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/notes.html'))
+);
 //get for all notes
 app.get('/api/notes', (req, res) => {
 res.json(`${req.method} request received for notes `);
@@ -56,7 +60,7 @@ app.get('/api/notes/:note_id', (req, res) => {
                 notes = parsedNotes;
 
                 fs.writeFile('./db/db.json',
-                JsON.stringify(parsedNotes),
+                JSON.stringify(parsedNotes),
                 (writeErr)=> writeErr ? console.err(writeErr)
                 :console.info('Updated Notes')
                 );
