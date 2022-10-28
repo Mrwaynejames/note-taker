@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-let reveiws = require('./db/db.json');
+let notes = require('./db/db.json');
 const uuid = require('./helpers/uuid');
 const PORT = 3001;
 const app = express();
@@ -14,12 +14,12 @@ app.use(express.static('public'));
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
 );
-
+//get for all notes
 app.get('/api/notes', (req, res) => {
 res.json(`${req.method} request received for notes `);
 console.info(`${req.method} request received for notes`);
 });
-
+//get for idividual notes
 app.get('/api/notes/:note_id', (req, res) => {
     if (req.body && req.params.note_id) {
       console.info(`${req.method} request received for a note`);
@@ -34,9 +34,10 @@ app.get('/api/notes/:note_id', (req, res) => {
       res.json('Note ID not found');
     }
   });
-
+//too add a new note
   app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a review`);
+    //making sure new note has required fields
     const { title, text } = req.body;
     if (title && text) {
         const newNote = {
@@ -45,7 +46,8 @@ app.get('/api/notes/:note_id', (req, res) => {
             note_id: uuid(),
         };
     }
-
-app.listen(PORT, () =>
+  });
+  
+  app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
