@@ -76,6 +76,7 @@ app.get('/api/notes/:id', (req, res) => {
     }res.json(notes);
 });
 
+
   app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
 );
